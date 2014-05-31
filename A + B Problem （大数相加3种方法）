@@ -1,0 +1,152 @@
+#include <stdio.h>
+#include <stdlib.h>
+typedef struct node{
+    char str[2500];
+    struct node *next;
+}node;
+# define is_demia(x) ((x)==' '||(x)=='\t')
+void stringtoshuzu(char *str,int a[],int b[])
+{
+    int i;
+    int IsFrist=0;
+    char *cp=str;
+    while(*cp!='\0'){
+      while(is_demia(*cp))
+            cp++;
+      i=0;
+      while(*cp!='\0'&&!(is_demia(*cp)))
+      {
+          if(IsFrist==0)
+          {
+              a[i]=(*cp)-48;
+          }
+          else{
+            b[i]=(*cp)-48;
+          }
+          i++;
+          cp++;
+      }
+      if(IsFrist==0)
+      {
+          a[i]=-1;
+          IsFrist=1;
+      }
+      else{
+       b[i]=-1;
+      }
+    }
+}
+void caculate(int a[],int b[],int c[])
+{
+    int i,j,k;
+    i=k=j=0;
+    while(a[i]!=-1)
+        i++;
+    while(b[j]!=-1)
+        j++;
+    k=(i>j?i:j);
+    c[k+1]=-1;
+    int jinwei;
+    jinwei=0;
+    i=i-1;
+    j=j-1;
+    while(i>=0&&j>=0)
+    {
+        c[k]=(a[i]+b[j]+jinwei)%10;
+        jinwei=(a[i]+b[j]+jinwei)/10;
+        i--;
+        j--;
+        k--;
+    }
+    if(i>=0)
+    {
+        while(i>=0)
+        {
+            c[k]=(a[i]+jinwei)%10;
+            jinwei=(a[i]+jinwei)/10;
+            i--;
+            k--;
+        }
+    }
+    if(j>=0)
+    {
+       while(j>=0)
+        {
+            c[k]=(b[j]+jinwei)%10;
+            jinwei=(b[j]+jinwei)/10;
+            j--;
+            k--;
+        }
+    }
+    if(jinwei!=0)
+            c[k]=jinwei;
+}
+void print(int a[],int b[],int c[])
+{
+    int i=0;
+    while(a[i]==0)
+        i++;
+    while(a[i]!=-1){
+        printf("%d",a[i]);
+        i++;
+    }
+    printf(" + ");
+    i=0;
+    while(b[i]==0)
+        i++;
+    while(b[i]!=-1)
+    {
+        printf("%d",b[i]);
+        i++;
+    }
+    printf(" = ");
+    i=0;
+    while(c[i]==0)
+        i++;
+    while(c[i]!=-1)
+    {
+        printf("%d",c[i]);
+        i++;
+    }
+}
+int main()
+{
+    int pos,space;
+    node *head,*cur;
+    head=cur=NULL;
+    node *p=NULL;
+    scanf("%d",&space);
+    pos=0;
+    while(pos<space)
+    {
+        p=malloc(sizeof(node));
+        p->next=NULL;
+        fflush(stdin);
+        gets(p->str);
+        if(head==NULL)
+        {
+            head=p;
+            cur=p;
+        }
+        else{
+            cur->next=p;
+            cur=cur->next;
+        }
+        pos++;
+    }
+    p=head;
+    int i=1;
+    int a[1000],b[1000],c[1000];
+    while(p!=NULL)
+    {
+        printf("case %d:\n",i);
+        stringtoshuzu(p->str,a,b);
+        memset(c,0,1000);
+        caculate(a,b,c);
+        print(a,b,c);
+        printf("\n");
+        i++;
+        p=p->next;
+    }
+    return 0;
+}
