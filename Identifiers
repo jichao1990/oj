@@ -1,0 +1,39 @@
+#include <stdio.h>
+#include <stdlib.h>
+# define valid(x)   ((x)=='_'||(x)=='.')
+# define alp(x)  (((x)>='a'&&(x)<='z')||((x)>='A'&&(x)<='Z'))
+int main()
+{
+    int num=0;
+    fflush(stdin);
+    scanf("%d",&num);
+    fflush(stdin);
+    int i,j;
+    i=j=0;
+    char a[100]={0};
+    while(i<num)
+    {
+        fgets(a,100,stdin);
+        j=0;
+        if(a[j]!='_'&&!(alp(a[j])))
+        {
+            printf("No\n");
+            i++;
+            continue;
+        }
+        j++;
+        while(a[j]!='\n')
+        {
+            if(!(valid(a[j]))&&!(alp(a[j])))
+                {
+                    printf("No\n");
+                    break;
+                }
+            j++;
+        }
+        if(a[j]=='\n')
+            printf("Yes\n");
+        i++;
+    }
+    return 0;
+}
